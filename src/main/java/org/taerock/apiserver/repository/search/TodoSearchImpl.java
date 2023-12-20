@@ -3,6 +3,9 @@ package org.taerock.apiserver.repository.search;
 import com.querydsl.jpa.JPQLQuery;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.taerock.apiserver.domain.QTodo;
 import org.taerock.apiserver.domain.Todo;
@@ -25,7 +28,13 @@ public class TodoSearchImpl extends QuerydslRepositorySupport implements TodoSea
 
 		query.where(todo.title.contains("1"));
 
-		query.fetch();
+		Pageable pageable = PageRequest.of(1,10, Sort.by("tno").descending());
+
+		this.getQuerydsl().applyPagination(pageable, query);
+
+		query.fetch(); // 목록 데이터
+
+		query.fetchCount(); // Long 타입 결과 나옴
 
 		return null;
 	}
