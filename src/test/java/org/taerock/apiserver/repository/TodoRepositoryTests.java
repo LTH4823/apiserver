@@ -52,4 +52,21 @@ public class TodoRepositoryTests {
 
 	}
 
+	@Test
+	public void testUpdate(){
+
+		// 먼저 로딩 하고 엔티티 객체를 변경 /setter
+		Long tno = 1L;
+		Optional<Todo> result = todoRepository.findById(tno);
+
+		Todo todo = result.orElseThrow();
+
+		todo.changeTitle("Update Title");
+		todo.changeContent("Update Content");
+		todo.changeComplete(true);
+
+		todoRepository.save(todo);
+
+	}
+
 }
