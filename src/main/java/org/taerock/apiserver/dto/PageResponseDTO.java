@@ -1,5 +1,6 @@
 package org.taerock.apiserver.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class PageResponseDTO<E> {
 
 	private int totalCount, prevPage, nextPage, current;
 
+	@Builder(builderMethodName = "withAll")
 	public PageResponseDTO(List<E> dtoList, PageRequestDTO pageRequestDTO, long total){
 
 		// 생성자 선언
