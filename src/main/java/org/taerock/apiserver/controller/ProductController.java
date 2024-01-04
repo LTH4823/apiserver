@@ -15,6 +15,7 @@ import org.taerock.apiserver.util.CustomFileUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @Log4j2
@@ -72,6 +73,48 @@ public class ProductController {
     @GetMapping("/{pno}")
     public ProductDTO read(@PathVariable("pno") Long pno){
         return productService.get(pno);
+    }
+
+    @PutMapping("/{pno}")
+    public Map<String, String> modify(@PathVariable("pno")Long pno, ProductDTO productDTO){
+
+        // ------------- 신규 이미지 포함 전의 파일 포함 등록
+        productDTO.setPno(pno);
+
+        //old product
+        ProductDTO oldProductDTO = productService.get(pno);
+
+        //file upload
+        List<MultipartFile> files = productDTO.getFiles();
+        List<String>currentUploadFileNames = fileUtil.saveFiles(files);
+
+        //keep files String
+        List<String>uploadedFileNames = productDTO.getUploadFileNames();
+
+        if(currentUploadFileNames != null && !currentUploadFileNames.isEmpty()){
+
+            uploadedFileNames.addAll(currentUploadFileNames);
+
+        }
+
+        productService.modify(productDTO);
+        // -------------
+
+        // ------------- 기존 파일 부분 삭제
+        List<String>oldFileNames = oldProductDTO.getUploadFileNames();
+
+        if(oldFileNames != null && oldFileNames.size() > 0){
+            List<String>removeFiles =
+                // oldFileNames 목록에서 filter로 uploadedFileNames fileName과 비교하여 결과 -1(없음)인 파일 분류
+                oldFileNames.stream().filter(fileName -> uploadedFileNames.indexOf(fileName) == -1).collect(Collectors.toList());
+
+            fileUtil.deleteFile(removeFiles);
+
+        }//end if
+        // -------------
+
+        return Map.of("RESULT", "SUCCESS");
+
     }
 
 }
