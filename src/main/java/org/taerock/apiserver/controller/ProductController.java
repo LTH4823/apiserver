@@ -117,4 +117,19 @@ public class ProductController {
 
     }
 
+    @DeleteMapping("/{pno}")
+    public Map<String, String>remove(@PathVariable("pno") Long pno){
+
+        // 기존 파일들 확인
+        List<String> olFileNames = productService.get(pno).getUploadFileNames();
+
+        // product pno 데이터 삭제
+        productService.remove(pno);
+
+        // product image 기존 파일들 삭제
+        fileUtil.deleteFile(olFileNames);
+
+        return Map.of("RESULT", "SUCCESS");
+    }
+
 }

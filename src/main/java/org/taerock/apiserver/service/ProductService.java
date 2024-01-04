@@ -16,4 +16,7 @@ public interface ProductService {
 
     void modify(ProductDTO productDTO);
 
+    // elementCollection은 엔티티 삭제 시 자동으로 삭제됨 종속적 특징
+    void remove(Long pno);
+
 }
