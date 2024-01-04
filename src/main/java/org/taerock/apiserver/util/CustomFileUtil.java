@@ -48,7 +48,7 @@ public class CustomFileUtil {
         if(files == null || files.size() == 0){
             return null;
         }
-
+        log.info("util " + files);
         List<String>uploadNames = new ArrayList<>();
 
         for(MultipartFile file: files){
@@ -76,7 +76,7 @@ public class CustomFileUtil {
             }
         }//end for
 
-       return null;
+       return uploadNames;
     }
 
     public ResponseEntity<Resource> getFile(String fileName){

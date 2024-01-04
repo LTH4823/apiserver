@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Table(name = "tbl_produect")
+@Table(name = "tbl_product")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

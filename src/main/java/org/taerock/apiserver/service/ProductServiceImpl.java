@@ -69,4 +69,41 @@
                     .build();
         }
 
+        @Override
+        public Long register(ProductDTO poProductDTO) {
+
+            Product product = dtoToEntity(poProductDTO);
+            log.info("-------------------");
+            log.info(product);
+            log.info(product.getImageList());
+
+            Long pno = productRepository.save(product).getPno();
+
+            return pno;
+        }
+
+        private Product dtoToEntity(ProductDTO productDTO){
+            Product product = Product.builder()
+                    .pno(productDTO.getPno())
+                    .pname(productDTO.getPname())
+                    .pdesc(productDTO.getPdesc())
+                    .price(productDTO.getPrice())
+                    .build();
+
+            // 업로드가 되었다면 있을 파일 명
+            List<String> uploadFileNames = productDTO.getUploadFileNames();
+
+            // 업로드 파일이 없는 경우
+            if(uploadFileNames == null || uploadFileNames.size() == 0){
+                return product;
+            }
+
+            // 업로드 파일이 있는 경우
+            uploadFileNames.forEach(fileName -> {
+                product.addImageString(fileName);
+            });
+
+            return product;
+        }
+
     }
