@@ -12,4 +12,6 @@ public interface ProductService {
 
     Long register(ProductDTO poProductDTO);
 
+    ProductDTO get(Long pno);
+
 }
