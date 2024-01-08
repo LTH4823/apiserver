@@ -6,12 +6,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.taerock.apiserver.security.handler.APILoginFailHandler;
+import org.taerock.apiserver.security.handler.APILoginSuccessHandler;
 
 import java.util.Arrays;
 
@@ -25,11 +28,21 @@ public class CustomSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         log.info("----------------security config-------------------");
 
+        // CORS 설정
         http.cors(httpSecurityCorsConfigurer -> {
             httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
         });
 
+        // 세션 생성 막기
+        http.sessionManagement(httpSecuritySessionManagementConfigurer -> {
+            httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.NEVER);
+        });
+
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
+
+        http.formLogin(config -> {
+            config.loginPage("/api/member/login");
+        });
 
         return http.build();
     }
@@ -40,7 +53,7 @@ public class CustomSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    //CORS 설정
+    // CORS 설정
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
