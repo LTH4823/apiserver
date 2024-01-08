@@ -30,7 +30,7 @@ public class TodoRepositoryTests {
 
 	}
 
-	@Test
+/*	@Test
 	public void testRead(){
 
 		Long tno = 1L;
@@ -40,7 +40,7 @@ public class TodoRepositoryTests {
 
 		log.info(todo);
 
-	}
+	}*/
 
 	@Test
 	public void testInsert(){

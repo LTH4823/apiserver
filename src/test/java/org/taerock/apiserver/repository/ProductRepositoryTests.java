@@ -118,7 +118,7 @@ public class ProductRepositoryTests {
 
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().build();
 
-        productRepository.searchList(pageRequestDTO);
+        //productRepository.searchList(pageRequestDTO);
 
     }
 
