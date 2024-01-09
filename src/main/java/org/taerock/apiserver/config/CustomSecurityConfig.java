@@ -10,9 +10,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.taerock.apiserver.security.filter.JWTCheckFilter;
 import org.taerock.apiserver.security.handler.APILoginFailHandler;
 import org.taerock.apiserver.security.handler.APILoginSuccessHandler;
 
@@ -45,6 +47,9 @@ public class CustomSecurityConfig {
             config.successHandler(new APILoginSuccessHandler());
             config.failureHandler(new APILoginFailHandler());
         });
+
+        // UsernamePasswordAuthenticationFilter(유저 비밀번호 검증) 전 필터적용
+        http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
