@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,6 +24,8 @@ import java.util.Arrays;
 @Configuration
 @Log4j2
 @RequiredArgsConstructor
+// 시큐리티
+@EnableMethodSecurity
 // Springboot 3.x 버전 이후 적용 방법이 달라져있습니다.
 public class CustomSecurityConfig {
 
