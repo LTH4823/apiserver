@@ -18,6 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.taerock.apiserver.security.filter.JWTCheckFilter;
 import org.taerock.apiserver.security.handler.APILoginFailHandler;
 import org.taerock.apiserver.security.handler.APILoginSuccessHandler;
+import org.taerock.apiserver.security.handler.CustomAccessDeniedHandler;
 
 import java.util.Arrays;
 
@@ -53,6 +54,10 @@ public class CustomSecurityConfig {
 
         // UsernamePasswordAuthenticationFilter(유저 비밀번호 검증) 전 필터적용
         http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        http.exceptionHandling(config -> {
+            config.accessDeniedHandler(new CustomAccessDeniedHandler());
+        });
 
         return http.build();
     }
