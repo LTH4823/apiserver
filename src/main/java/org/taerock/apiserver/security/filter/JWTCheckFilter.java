@@ -25,7 +25,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
-
+        // Preflight요청은 체크하지 않음
+        if(request.getMethod().equals("OPTIONS")){
+            return true;
+        }
 
         String path = request.getRequestURI();
 
@@ -34,6 +37,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/api/member/")){
 
             // true == not check
+            return true;
+        }
+
+        //이미지 조회 경로는 체크하지 않는다면
+        if(path.startsWith("/api/products/view/")) {
             return true;
         }
 
@@ -62,6 +70,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         log.info("-----------------JWTCheckFilter.................");
         String authHeaderStr = request.getHeader("Authorization");
+        log.info(authHeaderStr + "--------------------------------------");
         // 예외 처리 진행
         try {
             //Bearer accestoken...
