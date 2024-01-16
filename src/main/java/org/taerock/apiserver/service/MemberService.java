@@ -1,24 +1,27 @@
-package org.taerock.apiserver.service;
+    package org.taerock.apiserver.service;
 
-import org.springframework.transaction.annotation.Transactional;
-import org.taerock.apiserver.domain.Member;
-import org.taerock.apiserver.dto.MemberDTO;
+    import org.springframework.transaction.annotation.Transactional;
+    import org.taerock.apiserver.domain.Member;
+    import org.taerock.apiserver.dto.MemberDTO;
+    import org.taerock.apiserver.dto.MemberModifyDTO;
 
-import java.util.stream.Collectors;
+    import java.util.stream.Collectors;
 
-@Transactional
-public interface MemberService {
+    @Transactional
+    public interface MemberService {
 
-    MemberDTO getKakaoMember(String accessToken);
+        MemberDTO getKakaoMember(String accessToken);
 
-    default MemberDTO entityToDTO(Member member) {
-        MemberDTO dto = new MemberDTO(
-                member.getEmail(),
-                member.getPw(),
-                member.getNickname(),
-                member.isSocial(),
-                member.getMemberRoleList().stream().map(memberRole -> memberRole.name()).collect(Collectors.toList()));
-        return dto;
+        void modifyMember(MemberModifyDTO memberModifyDTO);
+
+        default MemberDTO entityToDTO(Member member) {
+            MemberDTO dto = new MemberDTO(
+                    member.getEmail(),
+                    member.getPw(),
+                    member.getNickname(),
+                    member.isSocial(),
+                    member.getMemberRoleList().stream().map(memberRole -> memberRole.name()).collect(Collectors.toList()));
+            return dto;
+        }
+
     }
-
-}

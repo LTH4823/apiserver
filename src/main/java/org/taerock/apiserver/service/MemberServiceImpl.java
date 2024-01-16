@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.taerock.apiserver.domain.Member;
 import org.taerock.apiserver.domain.MemberRole;
 import org.taerock.apiserver.dto.MemberDTO;
+import org.taerock.apiserver.dto.MemberModifyDTO;
 import org.taerock.apiserver.repository.MemberRepository;
 
 import java.util.LinkedHashMap;
@@ -55,6 +56,20 @@ public class MemberServiceImpl implements MemberService{
         MemberDTO memberDTO = entityToDTO(socialMember);
 
         return memberDTO;
+    }
+
+    @Override
+    public void modifyMember(MemberModifyDTO memberModifyDTO) {
+
+        Optional<Member> result = memberRepository.findById(memberModifyDTO.getEmail());
+
+        Member member = result.orElseThrow();
+
+        member.changeNickname(memberModifyDTO.getNickname());
+        member.changeSocial(false);
+        member.changePw(passwordEncoder.encode(memberModifyDTO.getPw()));
+
+        memberRepository.save(member);
     }
 
     private Member makeSocialMember(String email){
