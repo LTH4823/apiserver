@@ -10,7 +10,9 @@ import org.taerock.apiserver.domain.Cart;
 import org.taerock.apiserver.domain.CartItem;
 import org.taerock.apiserver.domain.Member;
 import org.taerock.apiserver.domain.Product;
+import org.taerock.apiserver.dto.CartItemListDTO;
 
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -28,7 +30,7 @@ public class CartRepositoryTests {
     @Test
     public void testInsertByProduct(){
         String email = "user1@aaa.com";
-        Long pno = 3L;
+        Long pno = 4L;
         int qty = 1;
 
         // 이메일 상품번호로 장바구니 아이템 확인 없으면 추가 있으면 수정 변경해서 저장
@@ -67,15 +69,51 @@ public class CartRepositoryTests {
 
     }
 
+    @Commit
     @Test
     public void testListOfMember(){
 
         String email = "user1@aaa.com";
 
-        cartItemRepository.getItemsOfCartDTOByEmail(email);
+        List<CartItemListDTO> cartItemListDTOList = cartItemRepository.getItemsOfCartDTOByEmail(email);
+
+        for (CartItemListDTO dto:cartItemListDTOList) {
+            log.info(dto);
+        }
 
     }
 
+    @Test
+    public void testUpdateByCino(){
 
+        Long cino = 1L;
+        int qty = 10;
+
+        Optional<CartItem> result = cartItemRepository.findById(cino);
+
+        CartItem cartItem = result.orElseThrow();
+
+        cartItem.changeQty(qty);
+
+        cartItemRepository.save(cartItem);
+
+    }
+
+    @Test
+    public void testDeleteThenList(){
+
+        Long cino = 5L;
+
+        Long cno = cartItemRepository.getCartFromItem(cino);
+
+        cartItemRepository.deleteById(cino);
+
+        List<CartItemListDTO> cartItemList = cartItemRepository.getItemsOfCartDTOByCart(cno);
+
+        for(CartItemListDTO dto: cartItemList){
+            log.info(dto);
+        }
+
+    }
 
 }
